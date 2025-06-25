@@ -1,7 +1,7 @@
 {
   "name": "@list-kr/parkeddomain2",
   "type": "module",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/List-KR/parkedDomain2.git"
@@ -16,7 +16,7 @@
     "test": "NODE_OPTIONS='--import=tsx --no-warnings' ava"
   },
   "bin": {
-    "parkedDomain2": "dist/parkedDomain2.mjs"
+    "parkedDomain2": "node dist/parkedDomain2.mjs"
   },
   "files": [
     "dist",
