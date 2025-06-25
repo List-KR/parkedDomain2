@@ -8,15 +8,15 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "build": "esbuild --bundle --outdir=dist --format=esm --target=es2022 --platform=node --banner:js='#!/usr/bin/env node' index.ts && npm run build:worker",
+    "build": "esbuild --bundle --outfile=dist/parkedDomain2.mjs --format=esm --target=es2022 --platform=node --banner:js=\"const require = (await import('node:module')).createRequire(import.meta.url);\" index.ts && npm run build:worker",
     "build:worker": "npm run build:worker:filters",
-    "build:worker:filters": "esbuild --bundle --outfile=dist/worker/filters.js --format=esm --target=es2022 --platform=node --banner:js='#!/usr/bin/env node' sources/worker/filters.ts",
+    "build:worker:filters": "esbuild --bundle --outfile=dist/worker/filters.mjs --format=esm --target=es2022 --platform=node --banner:js=\"const require = (await import('node:module')).createRequire(import.meta.url);\" sources/worker/filters.ts",
     "lint": "tsc --noEmit && eslint sources --ext .ts",
     "exec": "tsx sources/index.ts",
     "test": "NODE_OPTIONS='--import=tsx --no-warnings' ava"
   },
   "bin": {
-    "parkedDomain2": "dist/index.js"
+    "parkedDomain2": "dist/parkedDomain2.mjs"
   },
   "files": [
     "dist",
