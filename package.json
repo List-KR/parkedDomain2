@@ -1,0 +1,53 @@
+{
+  "name": "@list-kr/parkeddomain2",
+  "type": "module",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/List-KR/parkedDomain2.git"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "esbuild --bundle --outdir=dist --format=esm --target=es2022 --platform=node --banner:js='#!/usr/bin/env node' index.ts && npm run build:worker",
+    "build:worker": "npm run build:worker:filters",
+    "build:worker:filters": "esbuild --bundle --outfile=dist/worker/filters.js --format=esm --target=es2022 --platform=node --banner:js='#!/usr/bin/env node' sources/worker/filters.ts",
+    "lint": "tsc --noEmit && eslint sources --ext .ts",
+    "exec": "tsx sources/index.ts",
+    "test": "NODE_OPTIONS='--import=tsx --no-warnings' ava"
+  },
+  "bin": {
+    "parkedDomain2": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "ava": {
+    "files": [
+      "tests/**/*.test.ts"
+    ],
+    "extensions": {
+      "ts": "module"
+    },
+    "workerThreads": false
+  },
+  "dependencies": {
+    "@adguard/agtree": "^3.2.1",
+    "@inquirer/prompts": "^7.5.3",
+    "commander": "^14.0.0",
+    "es-toolkit": "^1.39.5",
+    "glob": "^11.0.3",
+    "got": "^14.4.7",
+    "ora": "^8.2.0",
+    "workerpool": "^9.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.33",
+    "ava": "^6.4.0",
+    "esbuild": "^0.25.5",
+    "eslint": "^9.29.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.35.0"
+  }
+}
