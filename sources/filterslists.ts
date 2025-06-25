@@ -4,6 +4,9 @@ import * as EsToolkit from 'es-toolkit'
 import * as AGTree from '@adguard/agtree'
 import * as Fs from 'node:fs'
 import * as Process from 'node:process'
+import * as Url from 'node:url'
+
+const Dirname = Url.fileURLToPath(new URL('.', import.meta.url))
 
 export class FiltersLists {
   protected Filenames: string[] = []
@@ -25,7 +28,7 @@ export class FiltersLists {
   }
 
   async ParseFiltersLists(AdblockType: { ABP?: boolean, UBO?: boolean }) {
-    let WorkerpoolInstance = Workerpool.pool('./worker/filters.js')
+    let WorkerpoolInstance = Workerpool.pool(Dirname + 'worker/filters.mjs')
     for (let Filename of this.Filenames) {
       this.Filters.push(...Fs.readFileSync(Filename, 'utf8').split(Process.platform === 'win32' ? '\r\n' : '\n'))
     }
@@ -39,7 +42,7 @@ export class FiltersLists {
   }
 
   async GetAllDomains() {
-    let WorkerpoolInstance = Workerpool.pool('./worker/filters.js')
+    let WorkerpoolInstance = Workerpool.pool(Dirname + 'worker/filters.mjs')
     let FiltersParserPromises: ReturnType<typeof WorkerpoolInstance.exec>[] = [] 
     for (let Filter of this.FiltersParsed) {
       let DomainsParserPromise = WorkerpoolInstance.exec('ParseDomains', [Filter]).then(Results => this.Domains.push(...Results as string[]))
