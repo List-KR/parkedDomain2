@@ -42,7 +42,7 @@
     "workerpool": "^9.3.2"
   },
   "devDependencies": {
-    "@types/node": "^22.15.33",
+    "@types/node": "^24.0.4",
     "ava": "^6.4.0",
     "esbuild": "^0.25.5",
     "eslint": "^9.29.0",
