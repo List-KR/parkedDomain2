@@ -10,3 +10,5 @@ npm i -g @list-kr/parkeddomain2
 ### Usage
 To run this CLI, use the following command:
 ```bash
+parkedDomain2
+```
