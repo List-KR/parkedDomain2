@@ -1,6 +1,7 @@
 import ora from 'ora'
 import * as Prompts from '@inquirer/prompts'
 import * as Glob from 'glob'
+import * as ESToolkit from 'es-toolkit'
 import { FiltersLists } from './sources/filterslists.js'
 import { DnsClient } from './sources/dns.js'
 import * as Fs from 'node:fs'
@@ -47,18 +48,20 @@ export async function RunPrompts() {
   await FiltersListsInstance.ParseFiltersLists(AdblockType)
   Spinner.text = 'Getting all domains from filters lists...'
   const Domains = await FiltersListsInstance.GetAllDomains()
-  const ParkedDomains: string[] = []
+  let ParkedDomains: string[] = []
   for (let I = 0; I < Domains.length; I++) {
     Spinner.text = `Checking domain ${Domains[I]} (${I + 1} of ${Domains.length} items)...`
     const DnsClientInstance = new DnsClient(Domains[I])
     for (let Record of (await DnsClientInstance.LookupNSRecords()) ?? []) {
       if (ParkedNSDomains.some(ParkedNSDomain => Record.includes(ParkedNSDomain))) {
         ParkedDomains.push(Domains[I])
+        break
       }
     }
   }
   Spinner.text = 'Finished checking domains.'
   Spinner.succeed()
+  ParkedDomains = ESToolkit.uniq(ParkedDomains)
   if (OutputFile === ''){
     console.log(ParkedDomains)
   } else {
