@@ -54,6 +54,6 @@ export class FiltersLists {
     }
     await Promise.all(FiltersParserPromises)
     this.Domains = this.Domains.filter(Domain => typeof Domain === 'string')
-    return Array.from(new Set(this.Domains)).filter(Domain => !Domain.includes('*'))
+    return EsToolkit.uniq(this.Domains).filter(Domain => !Domain.includes('*'))
   }
 }
