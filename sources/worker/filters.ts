@@ -4,7 +4,12 @@ import * as AGTree from '@adguard/agtree'
 let DomainRegExp = /[0-9a-zA-Z-\.]+\.[0-9a-zA-Z]+/g
 
 async function ParseFilters(Filters: string, AdblockType: { ABP?: boolean, UBO?: boolean }) {
-  return AGTree.RuleParser.parse(Filters, { parseAbpSpecificRules: AdblockType.ABP ?? false, parseUboSpecificRules: AdblockType.UBO ?? false })
+  try {
+    return AGTree.RuleParser.parse(Filters, { parseAbpSpecificRules: AdblockType.ABP ?? false, parseUboSpecificRules: AdblockType.UBO ?? false })
+  }
+  catch {
+    return null
+  }
 }
 
 async function ParseDomains(Filter: AGTree.AnyRule) {

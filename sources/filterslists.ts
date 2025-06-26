@@ -35,7 +35,11 @@ export class FiltersLists {
 
     let FiltersParserPromises: ReturnType<typeof WorkerpoolInstance.exec>[] = [] 
     for (let Filter of EsToolkit.chunk(this.Filters, 1)) {
-      let FiltersParserPromise = WorkerpoolInstance.exec('ParseFilters', [Filter[0], AdblockType]).then(Results => this.FiltersParsed.push(Results as AGTree.AnyRule))
+      let FiltersParserPromise = WorkerpoolInstance.exec('ParseFilters', [Filter[0], AdblockType]).then(Results => {
+        if (Results) {
+          this.FiltersParsed.push(Results as AGTree.AnyRule)
+        }
+      })
       FiltersParserPromises.push(FiltersParserPromise)
     }
     await Promise.all(FiltersParserPromises)
