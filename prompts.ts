@@ -60,8 +60,8 @@ export async function RunPrompts() {
   Spinner.text = 'Finished checking domains.'
   Spinner.succeed()
   if (OutputFile === ''){
-    console.log(Domains)
+    console.log(ParkedDomains)
   } else {
-    Fs.writeFileSync(OutputFile, Domains.join('\n'), 'utf8')
+    Fs.writeFileSync(OutputFile, ParkedDomains.join('\n'), 'utf8')
   }
 }
