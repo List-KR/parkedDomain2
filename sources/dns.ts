@@ -1,9 +1,9 @@
 import got from 'got'
 
-const HttpsClient = got.extend({
+let HttpsClient = got.extend({
   http2: true,
   headers: {
-    'User-Agent': 'sendmail-pgp',
+    'User-Agent': 'parkedDomain2',
     accept: 'application/dns-json'
   },
   https: {
@@ -100,6 +100,21 @@ type CloudflareDnsResponse<T extends 'A' | 'AAAA' | 'CNAME' | 'TXT' | 'MX' | 'TL
   NS: CloudflareDnsTypeCommonContainer
 }[T]
 
+function ReinitHttpsClient() {
+  HttpsClient = got.extend({
+  http2: true,
+  headers: {
+    'User-Agent': 'parkedDomain2',
+    accept: 'application/dns-json'
+  },
+  https: {
+    minVersion: 'TLSv1.3',
+    ciphers: 'TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256'
+  },
+  throwHttpErrors: false
+})
+}
+
 export class DnsClient {
   protected Domain: string
   protected DomainRecords: DnsResponse = {
@@ -111,7 +126,14 @@ export class DnsClient {
   }
 
   async LookupNSRecords() {
-    let HttpsResponse = JSON.parse((await HttpsClient(`https://cloudflare-dns.com/dns-query?name=${this.Domain}&type=NS`)).body) as CloudflareDnsResponse<'NS'>
+    let HttpsResponse: CloudflareDnsResponse<'NS'>
+    try {
+      HttpsResponse = JSON.parse((await HttpsClient(`https://cloudflare-dns.com/dns-query?name=${this.Domain}&type=NS`)).body) as CloudflareDnsResponse<'NS'>
+    }
+    catch {
+      ReinitHttpsClient()
+      HttpsResponse = JSON.parse((await HttpsClient(`https://cloudflare-dns.com/dns-query?name=${this.Domain}&type=NS`)).body) as CloudflareDnsResponse<'NS'>
+    }
     if (HttpsResponse.Answer) {
       this.DomainRecords.NS = HttpsResponse.Answer.map((Record) => Record.data)
     }
