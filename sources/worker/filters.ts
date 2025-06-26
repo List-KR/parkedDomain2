@@ -1,4 +1,5 @@
 import * as Workerpool from 'workerpool'
+import * as ParseDomain from 'parse-domain'
 import * as AGTree from '@adguard/agtree'
 
 let DomainRegExp = /[0-9a-zA-Z-\.]+\.[0-9a-zA-Z]+/g
@@ -40,7 +41,12 @@ async function ParseDomains(Filter: AGTree.AnyRule) {
   if (Filter.type === 'ScriptletInjectionRule' && Filter.domains.children.length > 0) {
     Domains.push(...Filter.domains.children.map(Domain => Domain.value))
   }
-  return Domains
+  return Domains.map(Domain => {
+    let ParsedDomain = ParseDomain.parseDomain(Domain)
+    if (ParsedDomain.type === ParseDomain.ParseResultType.Listed) {
+      return ParsedDomain.icann.domain + '.' + ParsedDomain.icann.topLevelDomains.join('.')
+    }
+  })
 }
 
 Workerpool.worker({

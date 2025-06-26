@@ -1,7 +1,7 @@
 {
   "name": "@list-kr/parkeddomain2",
   "type": "module",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/List-KR/parkedDomain2.git"
@@ -39,6 +39,7 @@
     "glob": "^11.0.3",
     "got": "^14.4.7",
     "ora": "^8.2.0",
+    "parse-domain": "^8.2.2",
     "workerpool": "^9.3.2"
   },
   "devDependencies": {
