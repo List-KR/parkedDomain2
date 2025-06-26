@@ -46,7 +46,7 @@ export async function RunPrompts() {
   for (let Domain of Domains) {
     Spinner.text = `Checking domain ${Domain} (${Domains.length} items)...`
     const DnsClientInstance = new DnsClient(Domain)
-    for (let Record of (await DnsClientInstance.LookupRecords()).NS ?? []) {
+    for (let Record of (await DnsClientInstance.LookupNSRecords()) ?? []) {
       if (ParkedNSDomains.some(ParkedNSDomain => Record.includes(ParkedNSDomain))) {
         ParkedDomains.push(Domain)
       }

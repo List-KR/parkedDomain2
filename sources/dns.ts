@@ -110,81 +110,11 @@ export class DnsClient {
     this.Domain = Domain
   }
 
-  protected async LookupARecords() {
-    let HttpsResponse = JSON.parse((await HttpsClient(`https://cloudflare-dns.com/dns-query?name=${this.Domain}&type=A`)).body) as CloudflareDnsResponse<'A'>
-    if (HttpsResponse.Answer) {
-      this.DomainRecords.A.push(...HttpsResponse.Answer.map((Record) => Record.data))
-    }
-  }
-
-  protected async LookupAAAARecords() {
-    let HttpsResponse = JSON.parse((await HttpsClient(`https://cloudflare-dns.com/dns-query?name=${this.Domain}&type=AAAA`)).body) as CloudflareDnsResponse<'AAAA'>
-    if (HttpsResponse.Answer) {
-      this.DomainRecords.AAAA.push(...HttpsResponse.Answer.map((Record) => Record.data))
-    }
-  }
-
-  protected async LookupTXTRecords() {
-    let HttpsResponse = JSON.parse((await HttpsClient(`https://cloudflare-dns.com/dns-query?name=${this.Domain}&type=TXT`)).body) as CloudflareDnsResponse<'TXT'>
-    if (HttpsResponse.Answer) {
-      this.DomainRecords.TXT.push(...HttpsResponse.Answer.map((Record) => Record.data))
-    }
-  }
-
-  protected async LookupMXRecords() {
-    let HttpsResponse = JSON.parse((await HttpsClient(`https://cloudflare-dns.com/dns-query?name=${this.Domain}&type=MX`)).body) as CloudflareDnsResponse<'MX'>
-    if (HttpsResponse.Answer) {
-      this.DomainRecords.MX.push(...HttpsResponse.Answer.map((Record) => ({
-        Exchange: Record.data.split(' ')[1],
-        Priority: parseInt(Record.data.split(' ')[0], 10)
-      })))
-    }
-  }
-
-  protected async LookupTLSARecords() {
-    let HttpsResponse = JSON.parse((await HttpsClient(`https://cloudflare-dns.com/dns-query?name=${this.Domain}&type=TLSA`)).body) as CloudflareDnsResponse<'TLSA'>
-    if (HttpsResponse.Answer) {
-      this.DomainRecords.TLSA.push(...HttpsResponse.Answer.map((Record) => ({
-        Usage: parseInt(Record.data.split(' ')[0], 10),
-        Selector: parseInt(Record.data.split(' ')[1], 10),
-        MatchingType: parseInt(Record.data.split(' ')[2], 10),
-        CertificateAssociationData: Record.data.split(' ')[3]
-      })))
-    }
-  }
-
-  protected async LookupCNAMERecords() {
-    let HttpsResponse = JSON.parse((await HttpsClient(`https://cloudflare-dns.com/dns-query?name=${this.Domain}&type=CNAME`)).body) as CloudflareDnsResponse<'CNAME'>
-    if (HttpsResponse.Answer) {
-      this.DomainRecords.CNAME = HttpsResponse.Answer.map((Record) => Record.data)[0]
-    }
-  }
-
-  protected async LookupNSRecords() {
+  async LookupNSRecords() {
     let HttpsResponse = JSON.parse((await HttpsClient(`https://cloudflare-dns.com/dns-query?name=${this.Domain}&type=NS`)).body) as CloudflareDnsResponse<'NS'>
-    this.DomainRecords.NS = HttpsResponse.Answer.map((Record) => Record.data)
-  }
-
-  async LookupRecords() {
-    await Promise.all([this.LookupCNAMERecords(), this.LookupNSRecords()])
-    if (this.DomainRecords.CNAME) {
-      return this.DomainRecords
+    if (HttpsResponse.Answer) {
+      this.DomainRecords.NS = HttpsResponse.Answer.map((Record) => Record.data)
     }
-    this.DomainRecords = {
-      A: [],
-      AAAA: [],
-      TXT: [],
-      MX: [],
-      TLSA: [],
-      NS: this.DomainRecords.NS,
-    }
-    await Promise.all([
-      this.LookupARecords(),
-      this.LookupAAAARecords(),
-      this.LookupTXTRecords(),
-      this.LookupMXRecords(),
-      this.LookupTLSARecords()
-    ])
-    return this.DomainRecords
+    return this.DomainRecords.NS
   }
 }
