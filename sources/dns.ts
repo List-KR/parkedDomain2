@@ -10,7 +10,10 @@ let HttpsClient = got.extend({
     minVersion: 'TLSv1.3',
     ciphers: 'TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256'
   },
-  throwHttpErrors: false
+  throwHttpErrors: false,
+  retry: {
+    errorCodes: ['ERR_HTTP2_GOAWAY_SESSION', 'ERR_HTTP2_STREAM_ERROR']
+  }
 })
 
 export type DnsResponse = {
