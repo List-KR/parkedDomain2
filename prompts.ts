@@ -3,6 +3,7 @@ import * as Prompts from '@inquirer/prompts'
 import * as Glob from 'glob'
 import { FiltersLists } from './sources/filterslists.js'
 import { DnsClient } from './sources/dns.js'
+import * as Fs from 'node:fs'
 
 export async function RunPrompts() {
   const FilenamesPatterns = await Prompts.input({
@@ -33,6 +34,10 @@ export async function RunPrompts() {
     validate: Input => Input.split(',').map(Domain => Domain.trim()).every(Domain => /^[0-9a-zA-Z-\.]+\.[0-9a-zA-Z]+$/.test(Domain)) ? true : 'Invalid domain format',
     default: 'parklogic.com,giantpanda.com,parkingcrew.net',
   })).split(',').map(Domain => Domain.trim())
+  const OutputFile = await Prompts.input({
+    message: 'Enter the output file path (leave empty to print to console)',
+    required: false
+  })
 
   const Spinner = ora('Getting Started...').start()
   const FiltersListsInstance = new FiltersLists([FilenamesPatterns])
@@ -54,5 +59,9 @@ export async function RunPrompts() {
   }
   Spinner.text = 'Finished checking domains.'
   Spinner.succeed()
-  console.log(ParkedDomains)
+  if (OutputFile === ''){
+    console.log(Domains)
+  } else {
+    Fs.writeFileSync(OutputFile, Domains.join('\n'), 'utf8')
+  }
 }
