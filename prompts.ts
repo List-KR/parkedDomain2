@@ -43,12 +43,12 @@ export async function RunPrompts() {
   Spinner.text = 'Getting all domains from filters lists...'
   const Domains = await FiltersListsInstance.GetAllDomains()
   const ParkedDomains: string[] = []
-  for (let Domain of Domains) {
-    Spinner.text = `Checking domain ${Domain} (${Domains.length} items)...`
-    const DnsClientInstance = new DnsClient(Domain)
+  for (let I = 0; I < Domains.length; I++) {
+    Spinner.text = `Checking domain ${Domains[I]} (${I + 1} of ${Domains.length} items)...`
+    const DnsClientInstance = new DnsClient(Domains[I])
     for (let Record of (await DnsClientInstance.LookupNSRecords()) ?? []) {
       if (ParkedNSDomains.some(ParkedNSDomain => Record.includes(ParkedNSDomain))) {
-        ParkedDomains.push(Domain)
+        ParkedDomains.push(Domains[I])
       }
     }
   }
