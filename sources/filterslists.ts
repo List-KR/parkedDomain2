@@ -53,6 +53,6 @@ export class FiltersLists {
       FiltersParserPromises.push(DomainsParserPromise)
     }
     await Promise.all(FiltersParserPromises)
-    return Array.from(new Set(this.Domains))
+    return Array.from(new Set(this.Domains)).filter(Domain => !Domain.includes('*'))
   }
 }
