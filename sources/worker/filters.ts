@@ -13,7 +13,7 @@ async function ParseDomains(Filter: AGTree.AnyRule) {
     return Domains
   }
   if (Filter.type === 'NetworkRule' && DomainRegExp.test(Filter.pattern.value)) {
-    this.Domains.push(...Filter.pattern.value.match(DomainRegExp))
+    Domains.push(...Filter.pattern.value.match(DomainRegExp))
     if (Filter.modifiers && Filter.modifiers.children) {
       for (let Modifier of Filter.modifiers.children.filter(Child => Child.name.value === 'domain')) {
         Modifier.value.value.match(DomainRegExp)?.forEach(Domain => Domains.push(Domain))
@@ -35,6 +35,7 @@ async function ParseDomains(Filter: AGTree.AnyRule) {
   if (Filter.type === 'ScriptletInjectionRule' && Filter.domains.children.length > 0) {
     Domains.push(...Filter.domains.children.map(Domain => Domain.value))
   }
+  return Domains
 }
 
 Workerpool.worker({

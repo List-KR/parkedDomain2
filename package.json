@@ -1,7 +1,7 @@
 {
   "name": "@list-kr/parkeddomain2",
   "type": "module",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/List-KR/parkedDomain2.git"
@@ -12,7 +12,7 @@
     "build:worker": "npm run build:worker:filters",
     "build:worker:filters": "esbuild --bundle --outfile=dist/worker/filters.mjs --format=esm --target=es2022 --platform=node --banner:js=\"#!/usr/bin/env node\nconst require = (await import('node:module')).createRequire(import.meta.url);\" sources/worker/filters.ts",
     "lint": "tsc --noEmit && eslint sources --ext .ts",
-    "exec": "tsx sources/index.ts",
+    "exec": "tsx index.ts",
     "test": "NODE_OPTIONS='--import=tsx --no-warnings' ava"
   },
   "bin": {
