@@ -2,7 +2,7 @@ import * as Workerpool from 'workerpool'
 import * as ParseDomain from 'parse-domain'
 import * as AGTree from '@adguard/agtree'
 
-let DomainRegExp = /[0-9a-zA-Z-\.]+\.[0-9a-zA-Z]+/g
+let DomainRegExp = /[0-9a-zA-Z-\.]+\.[0-9a-zA-Z]+(\.\*)?/g
 
 async function ParseFilters(Filters: string, AdblockType: { ABP?: boolean, UBO?: boolean }) {
   try {
