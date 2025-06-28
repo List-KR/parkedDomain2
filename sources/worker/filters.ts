@@ -41,7 +41,7 @@ async function ParseDomains(Filter: AGTree.AnyRule) {
   if (Filter.type === 'ScriptletInjectionRule' && Filter.domains.children.length > 0) {
     Domains.push(...Filter.domains.children.map(Domain => Domain.value))
   }
-  return Domains.map(Domain => {
+  return Domains.filter(Domain => !Domain.includes('*')).map(Domain => {
     let ParsedDomain = ParseDomain.parseDomain(Domain)
     if (ParsedDomain.type === ParseDomain.ParseResultType.Listed) {
       return ParsedDomain.icann.domain + '.' + ParsedDomain.icann.topLevelDomains.join('.')
