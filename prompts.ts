@@ -33,7 +33,7 @@ export async function RunPrompts() {
     message: 'Enter the namespace domains that manage a parked domain (comma separated)',
     required: false,
     validate: Input => Input.split(',').map(Domain => Domain.trim()).every(Domain => /^[0-9a-zA-Z-\.]+\.[0-9a-zA-Z]+$/.test(Domain)) ? true : 'Invalid domain format',
-    default: 'parklogic.com,giantpanda.com,parkingcrew.net',
+    default: 'parklogic.com,giantpanda.com,parkingcrew.net,namebrightdns.com,abovedomains.com',
   })).split(',').map(Domain => Domain.trim())
   const OutputFile = await Prompts.input({
     message: 'Enter the output file path (leave empty to print to console)',
