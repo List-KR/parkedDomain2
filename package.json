@@ -40,7 +40,7 @@
     "got": "^14.4.7",
     "ora": "^8.2.0",
     "parse-domain": "^8.2.2",
-    "workerpool": "^9.3.2"
+    "workerpool": "^10.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.15.33",
