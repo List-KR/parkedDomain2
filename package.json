@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@adguard/agtree": "^3.2.1",
-    "@inquirer/prompts": "^7.5.3",
+    "@inquirer/prompts": "^8.0.1",
     "commander": "^14.0.0",
     "es-toolkit": "^1.39.5",
     "glob": "^11.0.3",
